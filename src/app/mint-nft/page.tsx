@@ -26,6 +26,7 @@ import { cn } from "@/lib/utils";
 import { PageSubheader } from "@/components/Headers/page-subheader";
 import { ConfettiButton } from "@/components/magicui/confetti";
 import { motion } from "framer-motion";
+// import { AnimatedListDemo } from "@/components/Notifications/NftMintersNotifications/NftMintersNotifications";
 
 export default function Home() {
   const account = useActiveAccount();
@@ -88,8 +89,8 @@ export default function Home() {
                   </p>
                   <div className="pt-4 border-t border-white/10">
                     <p className="text-lg font-mono text-amber-400">
-                      Total Minted: {claimedSupply?.toString()}/
-                      {totalNFTSupply?.toString()}
+                      Total Available for Mint for this Wallet:{" "}
+                      {claimedSupply?.toString()}/{totalNFTSupply?.toString()}
                     </p>
                   </div>
                 </div>
@@ -165,6 +166,9 @@ export default function Home() {
             </div>
           </motion.div>
         )}
+        {/* <div className="fixed bottom-0 left-0 mb-4 ml-4 z-50 w-96">
+          <AnimatedListDemo className="bg-black/50 backdrop-blur-lg rounded-2xl border border-white/10" />
+        </div> */}
       </main>
     </div>
   );
