@@ -24,6 +24,8 @@ import { NftCard } from "@/components/cards/NftCard/NftCard";
 import { BlurHeader } from "@/components/Headers/Header";
 import { cn } from "@/lib/utils";
 import { PageSubheader } from "@/components/Headers/page-subheader";
+import { ConfettiButton } from "@/components/magicui/confetti";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const account = useActiveAccount();
@@ -32,6 +34,7 @@ export default function Home() {
   const chain = base;
 
   const [quantity, setQuantity] = useState(1);
+  const [isClaimed, setIsClaimed] = useState(false);
 
   // Replace the address with the address of the deployed contract
   const contract = getContract({
@@ -116,6 +119,7 @@ export default function Home() {
                 </button>
               </div>
             )}
+
             <TransactionButton
               transaction={() =>
                 claimTo({
@@ -125,7 +129,7 @@ export default function Home() {
                 })
               }
               onTransactionConfirmed={async () => {
-                alert("NFT Claimed!");
+                setIsClaimed(true);
                 setQuantity(1);
               }}
             >
@@ -133,6 +137,34 @@ export default function Home() {
             </TransactionButton>
           </div>
         </div>
+        {isClaimed && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.8 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-xl"
+          >
+            <div className="flex items-center gap-4">
+              <MediaRenderer
+                client={client}
+                src={contractMetadata?.image}
+                className="w-24 h-24 rounded-xl"
+              />
+              <div>
+                <h3 className="text-2xl font-bold text-white">Success! 🎉</h3>
+                <p className="text-white/80">
+                  Your {contractMetadata?.name} NFT has been minted!
+                </p>
+              </div>
+              <button
+                onClick={() => setIsClaimed(false)}
+                className="text-white hover:text-amber-400 transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+          </motion.div>
+        )}
       </main>
     </div>
   );
