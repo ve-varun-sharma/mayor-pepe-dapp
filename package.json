@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fontsource/eb-garamond": "^5.1.2",
     "@shadcn/ui": "^0.0.4",
     "@splinetool/react-spline": "^4.0.0",
     "@splinetool/runtime": "^1.9.68",

@@ -8,7 +8,6 @@ import {
   useActiveAccount,
   useReadContract,
 } from "thirdweb/react";
-import thirdwebIcon from "@public/thirdweb.svg";
 import { client } from "../client";
 import { defineChain, getContract, toEther } from "thirdweb";
 import { base } from "thirdweb/chains";
@@ -22,7 +21,10 @@ import {
 import { useState } from "react";
 import { FlipText } from "@/components/magicui/flip-text";
 import { NftCard } from "@/components/cards/NftCard/NftCard";
-import { BlurHeader } from "@/components/Header/Header";
+import { BlurHeader } from "@/components/Headers/Header";
+import { cn } from "@/lib/utils";
+import { PageSubheader } from "@/components/Headers/page-subheader";
+
 export default function Home() {
   const account = useActiveAccount();
 
@@ -67,49 +69,53 @@ export default function Home() {
       <BlurHeader />
       <main className="p-4 pb-10 min-h-[100vh] flex items-center justify-center container max-w-screen-lg mx-auto">
         <div className="py-20 text-center text-white">
-          <Header />
+          <PageSubheader />
           <div className="flex flex-col items-center mt-4">
             {isContractMetadataLoading ? (
               <p>Loading...</p>
             ) : (
               <>
                 <NftCard imageUrl={contractMetadata?.image} />
-                <h2 className="text-2xl font-semibold mt-4 text-white">
-                  {contractMetadata?.name}
-                </h2>
-                <p className="text-lg mt-2 text-white/80">
-                  {contractMetadata?.description}
-                </p>
+                <div className="mt-8 space-y-4 max-w-2xl mx-auto">
+                  <h2 className="text-4xl font-bold bg-gradient-to-r from-yellow-400 to-amber-600 bg-clip-text text-transparent">
+                    {contractMetadata?.name}
+                  </h2>
+                  <p className="text-xl text-gray-300 font-light leading-relaxed">
+                    {contractMetadata?.description}
+                  </p>
+                  <div className="pt-4 border-t border-white/10">
+                    <p className="text-lg font-mono text-amber-400">
+                      Total Minted: {claimedSupply?.toString()}/
+                      {totalNFTSupply?.toString()}
+                    </p>
+                  </div>
+                </div>
               </>
             )}
             {isClaimedSupplyLoading || isTotalSupplyLoading ? (
               <p>Loading...</p>
             ) : (
-              <p className="text-lg mt-2 font-bold">
-                Total NFT Supply: {claimedSupply?.toString()}/
-                {totalNFTSupply?.toString()}
-              </p>
+              <div className="flex flex-row items-center justify-center my-4">
+                <button
+                  className="bg-black text-white px-4 py-2 rounded-md mr-4"
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                >
+                  -
+                </button>
+                <input
+                  type="number"
+                  value={quantity}
+                  onChange={(e) => setQuantity(parseInt(e.target.value))}
+                  className="w-10 text-center border border-gray-300 rounded-md bg-black text-white"
+                />
+                <button
+                  className="bg-black text-white px-4 py-2 rounded-md mr-4"
+                  onClick={() => setQuantity(quantity + 1)}
+                >
+                  +
+                </button>
+              </div>
             )}
-            <div className="flex flex-row items-center justify-center my-4">
-              <button
-                className="bg-black text-white px-4 py-2 rounded-md mr-4"
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              >
-                -
-              </button>
-              <input
-                type="number"
-                value={quantity}
-                onChange={(e) => setQuantity(parseInt(e.target.value))}
-                className="w-10 text-center border border-gray-300 rounded-md bg-black text-white"
-              />
-              <button
-                className="bg-black text-white px-4 py-2 rounded-md mr-4"
-                onClick={() => setQuantity(quantity + 1)}
-              >
-                +
-              </button>
-            </div>
             <TransactionButton
               transaction={() =>
                 claimTo({
@@ -129,24 +135,5 @@ export default function Home() {
         </div>
       </main>
     </div>
-  );
-}
-
-function Header() {
-  return (
-    <header className="flex flex-row items-center text-white">
-      <Image
-        src={thirdwebIcon}
-        alt=""
-        className="size-[150px] md:size-[150px]"
-        style={{
-          filter: "drop-shadow(0px 0px 24px #a726a9a8)",
-        }}
-      />
-      <FlipText
-        className="text-4xl font-bold -tracking-widest text-white md:text-7xl md:leading-[5rem]"
-        word="Mint Mayor Pepe"
-      />
-    </header>
   );
 }

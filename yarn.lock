@@ -241,6 +241,11 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.2.tgz#d8bae93ac8b815b2bd7a98078cf91e2724ef11e5"
   integrity sha512-J4yDIIthosAsRZ5CPYP/jQvUAQtlZTTD/4suA08/FEnlxqW3sKS9iAhgsa9VYLZ6vDHn/ixJgIqRQPotoBjxIw==
 
+"@fontsource/eb-garamond@^5.1.2":
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/@fontsource/eb-garamond/-/eb-garamond-5.1.2.tgz#d6ffd8c386b21ca4c1f6d17c9f6e3cceaf7ac7a9"
+  integrity sha512-On24xvqbbC4Y0dRS+OKDlxPYtixFWEzwu7QqJ9yIzKS9pgPNxs/FgICnO7YD4GzY2obisnYHQLZILWFsIQUCrQ==
+
 "@google/model-viewer@2.1.1":
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@google/model-viewer/-/model-viewer-2.1.1.tgz#37c51143740c07c592d5cccbc8cfaa8be8b7ef82"
