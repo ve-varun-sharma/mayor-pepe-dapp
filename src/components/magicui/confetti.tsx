@@ -149,8 +149,6 @@ const ConfettiButtonComponent = ({
 
 ConfettiButtonComponent.displayName = "ConfettiButton";
 
-export const ConfettiButton = ConfettiButtonComponent;
-
 export function ConfettiButton({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   const [scope, animate] = useAnimate();

@@ -2,6 +2,7 @@
 import { ConnectButton } from "thirdweb/react";
 import { client } from "@/app/client";
 import { base } from "thirdweb/chains";
+import Link from "next/link";
 
 export function BlurHeader() {
   // Replace the chain with the chain you want to connect to
@@ -16,9 +17,16 @@ export function BlurHeader() {
       <div className="pointer-events-none absolute inset-0  z-[6] h-[20vh] backdrop-blur-[2px] [mask-image:linear-gradient(0deg,transparent_62.5%,#000_75%,#000_87.5%,transparent_100%)]"></div>
       <div className="pointer-events-none absolute inset-0  z-[7] h-[20vh] backdrop-blur-[4px] [mask-image:linear-gradient(0deg,transparent_75%,#000_87.5%,#000_100%,transparent_112.5%)]"></div>
       <div className="mx-auto flex w-full max-w-5xl items-center justify-between">
-        <a className="z-[10] text-white font-bold" href="/">
-          Home
-        </a>
+        <Link href="/" className="text-white font-bold" legacyBehavior>
+          <a>Home</a>
+        </Link>
+        <Link
+          href="/mint-token/"
+          className="text-white hover:text-cyan-400 px-4 py-2"
+          legacyBehavior
+        >
+          <a>Mint Tokens</a>
+        </Link>
         <div className="z-[10]">
           <ConnectButton client={client} chain={chain} />
         </div>
