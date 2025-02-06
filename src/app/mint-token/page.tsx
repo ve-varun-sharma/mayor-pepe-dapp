@@ -22,7 +22,7 @@ import { MediaRenderer } from "thirdweb/react";
 import { getContractMetadata } from "thirdweb/extensions/common";
 
 // Replace with your ERC20 contract address
-const TOKEN_CONTRACT_ADDRESS = "0xA17604c449299355bB6C4C6097933265410D2924";
+const TOKEN_CONTRACT_ADDRESS = "0xB926598d2E818D574dd952b8D227406E47a0E617";
 
 export default function MintTokenPage() {
   const account = useActiveAccount();
@@ -151,20 +151,27 @@ export default function MintTokenPage() {
                     // Claim logic (uses token amount directly)
                     console.log(
                       "Claim quantity:",
-                      BigInt(amount) * BigInt(10 ** decimals)
+                      (BigInt(amount) * BigInt(10 ** decimals)).toString()
                     );
                     return claimTo({
                       contract: tokenContract,
                       to: account?.address || "",
-                      quantity: BigInt(amount) * BigInt(10 ** decimals),
+                      quantity: (
+                        BigInt(amount) * BigInt(10 ** decimals)
+                      ).toString(),
                       proof: [],
+                      overrides: {
+                        value: BigInt(0),
+                      },
                     });
                   } else {
                     // Mint logic (needs decimal conversion)
                     return mintTo({
                       contract: tokenContract,
                       to: account?.address || "",
-                      amount: BigInt(amount) * BigInt(10 ** decimals),
+                      amount: (
+                        BigInt(amount) * BigInt(10 ** decimals)
+                      ).toString(),
                     });
                   }
                 } catch (error) {
