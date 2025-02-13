@@ -22,7 +22,7 @@ import {
 import { useState } from "react";
 import { FlipText } from "@/components/magicui/flip-text";
 import { NftCard } from "@/components/cards/NftCard/NftCard";
-
+import { BlurHeader } from "@/components/Header/Header";
 export default function Home() {
   const account = useActiveAccount();
 
@@ -64,10 +64,10 @@ export default function Home() {
   };
   return (
     <div className="min-h-screen bg-black">
+      <BlurHeader />
       <main className="p-4 pb-10 min-h-[100vh] flex items-center justify-center container max-w-screen-lg mx-auto">
         <div className="py-20 text-center text-white">
           <Header />
-          <ConnectButton client={client} chain={chain} />
           <div className="flex flex-col items-center mt-4">
             {isContractMetadataLoading ? (
               <p>Loading...</p>
