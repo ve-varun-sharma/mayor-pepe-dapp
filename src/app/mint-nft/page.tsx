@@ -21,6 +21,7 @@ import {
 } from "thirdweb/extensions/erc721";
 import { useState } from "react";
 import { FlipText } from "@/components/magicui/flip-text";
+import { NftCard } from "@/components/cards/NftCard/NftCard";
 
 export default function Home() {
   const account = useActiveAccount();
@@ -62,78 +63,78 @@ export default function Home() {
     return toEther(BigInt(total));
   };
   return (
-    <main className="p-4 pb-10 min-h-[100vh] flex items-center justify-center container max-w-screen-lg mx-auto">
-      <div className="py-20 text-center">
-        <Header />
-        <ConnectButton client={client} chain={chain} />
-        <div className="flex flex-col items-center mt-4">
-          {isContractMetadataLoading ? (
-            <p>Loading...</p>
-          ) : (
-            <>
-              <MediaRenderer
-                client={client}
-                src={contractMetadata?.image}
-                className="rounded-xl"
+    <div className="min-h-screen bg-black">
+      <main className="p-4 pb-10 min-h-[100vh] flex items-center justify-center container max-w-screen-lg mx-auto">
+        <div className="py-20 text-center text-white">
+          <Header />
+          <ConnectButton client={client} chain={chain} />
+          <div className="flex flex-col items-center mt-4">
+            {isContractMetadataLoading ? (
+              <p>Loading...</p>
+            ) : (
+              <>
+                <NftCard imageUrl={contractMetadata?.image} />
+                <h2 className="text-2xl font-semibold mt-4 text-white">
+                  {contractMetadata?.name}
+                </h2>
+                <p className="text-lg mt-2 text-white/80">
+                  {contractMetadata?.description}
+                </p>
+              </>
+            )}
+            {isClaimedSupplyLoading || isTotalSupplyLoading ? (
+              <p>Loading...</p>
+            ) : (
+              <p className="text-lg mt-2 font-bold">
+                Total NFT Supply: {claimedSupply?.toString()}/
+                {totalNFTSupply?.toString()}
+              </p>
+            )}
+            <div className="flex flex-row items-center justify-center my-4">
+              <button
+                className="bg-black text-white px-4 py-2 rounded-md mr-4"
+                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+              >
+                -
+              </button>
+              <input
+                type="number"
+                value={quantity}
+                onChange={(e) => setQuantity(parseInt(e.target.value))}
+                className="w-10 text-center border border-gray-300 rounded-md bg-black text-white"
               />
-              <h2 className="text-2xl font-semibold mt-4">
-                {contractMetadata?.name}
-              </h2>
-              <p className="text-lg mt-2">{contractMetadata?.description}</p>
-            </>
-          )}
-          {isClaimedSupplyLoading || isTotalSupplyLoading ? (
-            <p>Loading...</p>
-          ) : (
-            <p className="text-lg mt-2 font-bold">
-              Total NFT Supply: {claimedSupply?.toString()}/
-              {totalNFTSupply?.toString()}
-            </p>
-          )}
-          <div className="flex flex-row items-center justify-center my-4">
-            <button
-              className="bg-black text-white px-4 py-2 rounded-md mr-4"
-              onClick={() => setQuantity(Math.max(1, quantity - 1))}
+              <button
+                className="bg-black text-white px-4 py-2 rounded-md mr-4"
+                onClick={() => setQuantity(quantity + 1)}
+              >
+                +
+              </button>
+            </div>
+            <TransactionButton
+              transaction={() =>
+                claimTo({
+                  contract: contract,
+                  to: account?.address || "",
+                  quantity: BigInt(quantity),
+                })
+              }
+              onTransactionConfirmed={async () => {
+                alert("NFT Claimed!");
+                setQuantity(1);
+              }}
             >
-              -
-            </button>
-            <input
-              type="number"
-              value={quantity}
-              onChange={(e) => setQuantity(parseInt(e.target.value))}
-              className="w-10 text-center border border-gray-300 rounded-md bg-black text-white"
-            />
-            <button
-              className="bg-black text-white px-4 py-2 rounded-md mr-4"
-              onClick={() => setQuantity(quantity + 1)}
-            >
-              +
-            </button>
+              {`Claim NFT (${getPrice(quantity)} ETH)`}
+            </TransactionButton>
           </div>
-          <TransactionButton
-            transaction={() =>
-              claimTo({
-                contract: contract,
-                to: account?.address || "",
-                quantity: BigInt(quantity),
-              })
-            }
-            onTransactionConfirmed={async () => {
-              alert("NFT Claimed!");
-              setQuantity(1);
-            }}
-          >
-            {`Claim NFT (${getPrice(quantity)} ETH)`}
-          </TransactionButton>
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }
 
 function Header() {
   return (
-    <header className="flex flex-row items-center">
+    <header className="flex flex-row items-center text-white">
       <Image
         src={thirdwebIcon}
         alt=""
@@ -143,7 +144,7 @@ function Header() {
         }}
       />
       <FlipText
-        className="text-4xl font-bold -tracking-widest text-black dark:text-white md:text-7xl md:leading-[5rem]"
+        className="text-4xl font-bold -tracking-widest text-white md:text-7xl md:leading-[5rem]"
         word="Mint Mayor Pepe"
       />
     </header>
