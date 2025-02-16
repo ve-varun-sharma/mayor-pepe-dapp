@@ -11,13 +11,12 @@ if (!clientId) {
 }
 
 export const client = createThirdwebClient({
-  clientId: process.env.NEXT_PUBLIC_TEMPLATE_CLIENT_ID,
+  clientId: clientId,
   config: {
     rpc: {
-      base: {
-        http: [
-          `https://base.rpc.thirdweb.com/${process.env.NEXT_PUBLIC_TEMPLATE_CLIENT_ID}`,
-        ],
+      8453: {
+        // Base chain ID
+        http: `https://8453.rpc.thirdweb.com/${clientId}`,
       },
     },
   },
