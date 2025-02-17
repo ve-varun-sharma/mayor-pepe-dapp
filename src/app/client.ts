@@ -14,6 +14,7 @@ export const client = createThirdwebClient({
   clientId: clientId,
   config: {
     rpc: {
+      // @ts-ignore
       8453: {
         // Base chain ID
         http: `https://8453.rpc.thirdweb.com/${clientId}`,

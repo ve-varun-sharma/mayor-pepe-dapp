@@ -5,7 +5,7 @@ import { SparklesText } from "@/components/magicui/sparkles-text";
 import { HyperText } from "@/components/magicui/hyper-text";
 import { InteractiveHoverButton } from "@/components/magicui/interactive-hover-button";
 import Link from "next/link";
-import { SplashCursor } from "@/components/ui/splash-cursor";
+// import { SplashCursor } from "@/components/ui/splash-cursor";
 
 export default function Home() {
   return (
@@ -35,7 +35,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-        <SplashCursor />
+        {/* <SplashCursor /> */}
       </main>
     </div>
   );

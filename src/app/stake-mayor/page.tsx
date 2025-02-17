@@ -6,6 +6,7 @@ import { motion, useInView } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import { useRef } from "react";
 import { SplashCursor } from "@/components/ui/splash-cursor";
+import { BlurHeader } from "@/components/Headers/Header";
 
 export default function Hero() {
   const fadeInRef = useRef(null);
@@ -27,6 +28,7 @@ export default function Hero() {
   return (
     <section id="hero" className="bg-black text-white">
       <div className="relative h-full overflow-hidden py-14">
+        <BlurHeader />
         <div className="container mx-auto z-10 flex flex-col items-center">
           <div className="mt-20 grid grid-cols-1">
             <div className="flex flex-col items-center gap-6 pb-8 text-center">
