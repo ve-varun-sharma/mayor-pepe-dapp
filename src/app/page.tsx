@@ -23,9 +23,16 @@ export default function Home() {
             <Link href="/mint-nft">
               <InteractiveHoverButton>Mint Mayor NFT</InteractiveHoverButton>
             </Link>
-            <InteractiveHoverButton>
-              Mint $Mayor (Coming Soon)
-            </InteractiveHoverButton>
+            <Link href="/mint-token">
+              <InteractiveHoverButton>
+                Mint $Mayor (Coming Soon)
+              </InteractiveHoverButton>
+            </Link>
+            <Link href="/stake-mayor">
+              <InteractiveHoverButton>
+                Stake $Mayor 😲 (Coming Soon)
+              </InteractiveHoverButton>
+            </Link>
           </div>
         </div>
         <SplashCursor />
