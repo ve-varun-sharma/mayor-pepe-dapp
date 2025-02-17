@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 import { useEffect, useRef } from "react";
 
@@ -727,7 +726,7 @@ function SplashCursor({
         //@ts-ignore
         r.internalFormat,
         //@ts-ignore
-        år.format,
+        r.format,
         //@ts-ignore
         texType,
         //@ts-ignore
@@ -905,7 +904,9 @@ function SplashCursor({
       let height = scaleByPixelRatio(canvas.clientHeight);
       //@ts-ignore
       if (canvas.width !== width || canvas.height !== height) {
+        //@ts-ignore
         canvas.width = width;
+        //@ts-ignore
         canvas.height = height;
         return true;
       }
@@ -936,210 +937,370 @@ function SplashCursor({
       // Curl
       curlProgram.bind();
       gl.uniform2f(
+        //@ts-ignore
         curlProgram.uniforms.texelSize,
+        //@ts-ignore
         velocity.texelSizeX,
+        //@ts-ignore
         velocity.texelSizeY
       );
+      //@ts-ignore
       gl.uniform1i(curlProgram.uniforms.uVelocity, velocity.read.attach(0));
+      //@ts-ignore
       blit(curl);
 
       // Vorticity
       vorticityProgram.bind();
       gl.uniform2f(
+        //@ts-ignore
         vorticityProgram.uniforms.texelSize,
+        //@ts-ignore
         velocity.texelSizeX,
+        //@ts-ignore
         velocity.texelSizeY
       );
+      //@ts-ignore
       gl.uniform1i(
+        //@ts-ignore
         vorticityProgram.uniforms.uVelocity,
+        //@ts-ignore
         velocity.read.attach(0)
       );
-      gl.uniform1i(vorticityProgram.uniforms.uCurl, curl.attach(1));
+      //@ts-ignore
+      gl.uniform1i(
+        //@ts-ignore
+        vorticityProgram.uniforms.uCurl,
+        //@ts-ignore
+        curl.attach(1)
+      );
+      //@ts-ignore
       gl.uniform1f(vorticityProgram.uniforms.curl, config.CURL);
+      //@ts-ignore
       gl.uniform1f(vorticityProgram.uniforms.dt, dt);
+      //@ts-ignore
       blit(velocity.write);
+      //@ts-ignore
       velocity.swap();
 
       // Divergence
       divergenceProgram.bind();
       gl.uniform2f(
+        //@ts-ignore
         divergenceProgram.uniforms.texelSize,
+        //@ts-ignore
         velocity.texelSizeX,
+        //@ts-ignore
         velocity.texelSizeY
       );
+      //@ts-ignore
       gl.uniform1i(
+        //@ts-ignore
         divergenceProgram.uniforms.uVelocity,
+        //@ts-ignore
         velocity.read.attach(0)
       );
+      //@ts-ignore
       blit(divergence);
 
       // Clear pressure
       clearProgram.bind();
+      //@ts-ignore
       gl.uniform1i(clearProgram.uniforms.uTexture, pressure.read.attach(0));
+      //@ts-ignore
       gl.uniform1f(clearProgram.uniforms.value, config.PRESSURE);
+      //@ts-ignore
       blit(pressure.write);
+      //@ts-ignore
       pressure.swap();
 
       // Pressure
       pressureProgram.bind();
       gl.uniform2f(
+        //@ts-ignore
         pressureProgram.uniforms.texelSize,
+        //@ts-ignore
         velocity.texelSizeX,
+        //@ts-ignore
         velocity.texelSizeY
       );
-      gl.uniform1i(pressureProgram.uniforms.uDivergence, divergence.attach(0));
+      //@ts-ignore
+      gl.uniform1i(
+        //@ts-ignore
+        pressureProgram.uniforms.uDivergence,
+        //@ts-ignore
+        divergence.attach(0)
+      );
       for (let i = 0; i < config.PRESSURE_ITERATIONS; i++) {
+        //@ts-ignore
         gl.uniform1i(
+          //@ts-ignore
           pressureProgram.uniforms.uPressure,
+          //@ts-ignore
           pressure.read.attach(1)
         );
+        //@ts-ignore
         blit(pressure.write);
+        //@ts-ignore
         pressure.swap();
       }
 
       // Gradient Subtract
       gradienSubtractProgram.bind();
       gl.uniform2f(
+        //@ts-ignore
         gradienSubtractProgram.uniforms.texelSize,
+        //@ts-ignore
         velocity.texelSizeX,
+        //@ts-ignore
         velocity.texelSizeY
       );
+      //@ts-ignore
       gl.uniform1i(
+        //@ts-ignore
         gradienSubtractProgram.uniforms.uPressure,
+        //@ts-ignore
         pressure.read.attach(0)
       );
+      //@ts-ignore
       gl.uniform1i(
+        //@ts-ignore
         gradienSubtractProgram.uniforms.uVelocity,
+        //@ts-ignore
         velocity.read.attach(1)
       );
+      //@ts-ignore
       blit(velocity.write);
+      //@ts-ignore
       velocity.swap();
 
       // Advection
       advectionProgram.bind();
+      //@ts-ignore
       gl.uniform2f(
+        //@ts-ignore
         advectionProgram.uniforms.texelSize,
+        //@ts-ignore
         velocity.texelSizeX,
+        //@ts-ignore
         velocity.texelSizeY
       );
+      //@ts-ignore
       if (!ext.supportLinearFiltering)
+        //@ts-ignore
         gl.uniform2f(
+          //@ts-ignore
           advectionProgram.uniforms.dyeTexelSize,
+          //@ts-ignore
           velocity.texelSizeX,
+          //@ts-ignore
           velocity.texelSizeY
         );
+      //@ts-ignore
       let velocityId = velocity.read.attach(0);
+      //@ts-ignore
       gl.uniform1i(advectionProgram.uniforms.uVelocity, velocityId);
+      //@ts-ignore
       gl.uniform1i(advectionProgram.uniforms.uSource, velocityId);
+      //@ts-ignore
       gl.uniform1f(advectionProgram.uniforms.dt, dt);
+      //@ts-ignore
       gl.uniform1f(
+        //@ts-ignore
         advectionProgram.uniforms.dissipation,
+        //@ts-ignore
         config.VELOCITY_DISSIPATION
       );
+      //@ts-ignore
       blit(velocity.write);
+      //@ts-ignore
       velocity.swap();
 
+      //@ts-ignore
       if (!ext.supportLinearFiltering)
+        //@ts-ignore
         gl.uniform2f(
+          //@ts-ignore
           advectionProgram.uniforms.dyeTexelSize,
+          //@ts-ignore
           dye.texelSizeX,
+          //@ts-ignore
           dye.texelSizeY
         );
+      //@ts-ignore
       gl.uniform1i(
+        //@ts-ignore
         advectionProgram.uniforms.uVelocity,
+        //@ts-ignore
         velocity.read.attach(0)
       );
-      gl.uniform1i(advectionProgram.uniforms.uSource, dye.read.attach(1));
+      //@ts-ignore
+      gl.uniform1i(
+        //@ts-ignore
+        advectionProgram.uniforms.uSource,
+        //@ts-ignore
+        dye.read.attach(1)
+      );
+      //@ts-ignore
       gl.uniform1f(
+        //@ts-ignore
         advectionProgram.uniforms.dissipation,
+        //@ts-ignore
         config.DENSITY_DISSIPATION
       );
+      //@ts-ignore
       blit(dye.write);
+      //@ts-ignore
       dye.swap();
     }
 
+    //@ts-ignore
     function render(target) {
+      //@ts-ignore
       gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+      //@ts-ignore
       gl.enable(gl.BLEND);
+      //@ts-ignore
       drawDisplay(target);
     }
 
+    //@ts-ignore
     function drawDisplay(target) {
+      //@ts-ignore
       let width = target == null ? gl.drawingBufferWidth : target.width;
+      //@ts-ignore
       let height = target == null ? gl.drawingBufferHeight : target.height;
+      //@ts-ignore
       displayMaterial.bind();
       if (config.SHADING)
+        //@ts-ignore
         gl.uniform2f(
+          //@ts-ignore
           displayMaterial.uniforms.texelSize,
+          //@ts-ignore
           1.0 / width,
+          //@ts-ignore
           1.0 / height
         );
+      //@ts-ignore
       gl.uniform1i(displayMaterial.uniforms.uTexture, dye.read.attach(0));
+      //@ts-ignore
       blit(target);
     }
 
+    //@ts-ignore
     function splatPointer(pointer) {
+      //@ts-ignore
       let dx = pointer.deltaX * config.SPLAT_FORCE;
+      //@ts-ignore
       let dy = pointer.deltaY * config.SPLAT_FORCE;
+      //@ts-ignore
       splat(pointer.texcoordX, pointer.texcoordY, dx, dy, pointer.color);
     }
 
+    //@ts-ignore
     function clickSplat(pointer) {
+      //@ts-ignore
       const color = generateColor();
+      //@ts-ignore
       color.r *= 10.0;
+      //@ts-ignore
       color.g *= 10.0;
+      //@ts-ignore
       color.b *= 10.0;
+      //@ts-ignore
       let dx = 10 * (Math.random() - 0.5);
+      //@ts-ignore
       let dy = 30 * (Math.random() - 0.5);
+      //@ts-ignore
       splat(pointer.texcoordX, pointer.texcoordY, dx, dy, color);
     }
 
+    //@ts-ignore
     function splat(x, y, dx, dy, color) {
+      //@ts-ignore
       splatProgram.bind();
+      //@ts-ignore
       gl.uniform1i(splatProgram.uniforms.uTarget, velocity.read.attach(0));
+      //@ts-ignore
+      //@ts-ignore
       gl.uniform1f(
+        //@ts-ignore
         splatProgram.uniforms.aspectRatio,
+        //@ts-ignore
         canvas.width / canvas.height
       );
+      //@ts-ignore
       gl.uniform2f(splatProgram.uniforms.point, x, y);
+      //@ts-ignore
       gl.uniform3f(splatProgram.uniforms.color, dx, dy, 0.0);
+      //@ts-ignore
       gl.uniform1f(
+        //@ts-ignore
         splatProgram.uniforms.radius,
+        //@ts-ignore
         correctRadius(config.SPLAT_RADIUS / 100.0)
       );
+      //@ts-ignore
       blit(velocity.write);
+      //@ts-ignore
       velocity.swap();
 
+      //@ts-ignore
       gl.uniform1i(splatProgram.uniforms.uTarget, dye.read.attach(0));
+      //@ts-ignore
       gl.uniform3f(splatProgram.uniforms.color, color.r, color.g, color.b);
+      //@ts-ignore
       blit(dye.write);
+      //@ts-ignore
       dye.swap();
     }
 
+    //@ts-ignore
     function correctRadius(radius) {
+      //@ts-ignore
       let aspectRatio = canvas.width / canvas.height;
+      //@ts-ignore
       if (aspectRatio > 1) radius *= aspectRatio;
+      //@ts-ignore
       return radius;
     }
 
+    //@ts-ignore
     function updatePointerDownData(pointer, id, posX, posY) {
+      //@ts-ignore
       pointer.id = id;
+      //@ts-ignore
       pointer.down = true;
+      //@ts-ignore
       pointer.moved = false;
+      //@ts-ignore
       pointer.texcoordX = posX / canvas.width;
+      //@ts-ignore
       pointer.texcoordY = 1.0 - posY / canvas.height;
+      //@ts-ignore
+      //@ts-ignore
       pointer.prevTexcoordX = pointer.texcoordX;
+      //@ts-ignore
       pointer.prevTexcoordY = pointer.texcoordY;
+      //@ts-ignore
       pointer.deltaX = 0;
+      //@ts-ignore
       pointer.deltaY = 0;
+      //@ts-ignore
       pointer.color = generateColor();
     }
 
+    //@ts-ignore
     function updatePointerMoveData(pointer, posX, posY, color) {
+      //@ts-ignore
       pointer.prevTexcoordX = pointer.texcoordX;
+      //@ts-ignore
       pointer.prevTexcoordY = pointer.texcoordY;
+      //@ts-ignore
       pointer.texcoordX = posX / canvas.width;
+      //@ts-ignore
       pointer.texcoordY = 1.0 - posY / canvas.height;
+      //@ts-ignore
       pointer.deltaX = correctDeltaX(pointer.texcoordX - pointer.prevTexcoordX);
       pointer.deltaY = correctDeltaY(pointer.texcoordY - pointer.prevTexcoordY);
       pointer.moved =
@@ -1152,31 +1313,49 @@ function SplashCursor({
     }
     //@ts-ignore
     function correctDeltaX(delta) {
+      //@ts-ignore
       let aspectRatio = canvas.width / canvas.height;
+      //@ts-ignore
       if (aspectRatio < 1) delta *= aspectRatio;
+      //@ts-ignore
       return delta;
     }
     //@ts-ignore
     function correctDeltaY(delta) {
+      //@ts-ignore
       let aspectRatio = canvas.width / canvas.height;
+      //@ts-ignore
       if (aspectRatio > 1) delta /= aspectRatio;
+      //@ts-ignore
       return delta;
     }
     //@ts-ignore
     function generateColor() {
+      //@ts-ignore
       let c = HSVtoRGB(Math.random(), 1.0, 1.0);
+      //@ts-ignore
       c.r *= 0.15;
+      //@ts-ignore
       c.g *= 0.15;
+      //@ts-ignore
       c.b *= 0.15;
+      //@ts-ignore
       return c;
     }
 
+    //@ts-ignore
     function HSVtoRGB(h, s, v) {
+      //@ts-ignore
       let r, g, b, i, f, p, q, t;
+      //@ts-ignore
       i = Math.floor(h * 6);
+      //@ts-ignore
       f = h * 6 - i;
+      //@ts-ignore
       p = v * (1 - s);
+      //@ts-ignore
       q = v * (1 - f * s);
+      //@ts-ignore
       t = v * (1 - (1 - f) * s);
       switch (i % 6) {
         case 0:
@@ -1215,27 +1394,36 @@ function SplashCursor({
       return { r, g, b };
     }
 
+    //@ts-ignore
     function wrap(value, min, max) {
       const range = max - min;
       if (range === 0) return min;
       return ((value - min) % range) + min;
     }
 
+    //@ts-ignore
     function getResolution(resolution) {
+      //@ts-ignore
       let aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
+      //@ts-ignore
       if (aspectRatio < 1) aspectRatio = 1.0 / aspectRatio;
+      //@ts-ignore
       const min = Math.round(resolution);
+      //@ts-ignore
       const max = Math.round(resolution * aspectRatio);
+      //@ts-ignore
       if (gl.drawingBufferWidth > gl.drawingBufferHeight)
         return { width: max, height: min };
       else return { width: min, height: max };
     }
 
+    //@ts-ignore
     function scaleByPixelRatio(input) {
       const pixelRatio = window.devicePixelRatio || 1;
       return Math.floor(input * pixelRatio);
     }
 
+    //@ts-ignore
     function hashCode(s) {
       if (s.length === 0) return 0;
       let hash = 0;
@@ -1256,6 +1444,7 @@ function SplashCursor({
 
     document.body.addEventListener(
       "mousemove",
+      //@ts-ignore
       function handleFirstMouseMove(e) {
         let pointer = pointers[0];
         let posX = scaleByPixelRatio(e.clientX);
@@ -1291,9 +1480,13 @@ function SplashCursor({
     );
     //@ts-ignore
     window.addEventListener("touchstart", (e) => {
+      //@ts-ignore
       const touches = e.targetTouches;
+      //@ts-ignore
       let pointer = pointers[0];
+      //@ts-ignore
       for (let i = 0; i < touches.length; i++) {
+        //@ts-ignore
         let posX = scaleByPixelRatio(touches[i].clientX);
         let posY = scaleByPixelRatio(touches[i].clientY);
         updatePointerDownData(pointer, touches[i].identifier, posX, posY);
@@ -1315,9 +1508,13 @@ function SplashCursor({
     );
     //@ts-ignore
     window.addEventListener("touchend", (e) => {
+      //@ts-ignore
       const touches = e.changedTouches;
+      //@ts-ignore
       let pointer = pointers[0];
+      //@ts-ignore
       for (let i = 0; i < touches.length; i++) {
+        //@ts-ignore
         updatePointerUpData(pointer);
       }
     });
