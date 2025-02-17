@@ -1,3 +1,5 @@
+"use client";
+
 import { FlipText } from "@/components/magicui/flip-text";
 
 export function PageSubheader() {

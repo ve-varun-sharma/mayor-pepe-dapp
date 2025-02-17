@@ -20,9 +20,11 @@ import { BlurHeader } from "@/components/Headers/Header";
 import { useState } from "react";
 import { MediaRenderer } from "thirdweb/react";
 import { getContractMetadata } from "thirdweb/extensions/common";
+import { prepareContractCall, sendTransaction } from "thirdweb";
+import Spline from "@splinetool/react-spline/next";
 
 // Replace with your ERC20 contract address
-const TOKEN_CONTRACT_ADDRESS = "0xB926598d2E818D574dd952b8D227406E47a0E617";
+const TOKEN_CONTRACT_ADDRESS = "0xA17604c449299355bB6C4C6097933265410D2924";
 
 export default function MintTokenPage() {
   const account = useActiveAccount();
@@ -30,6 +32,7 @@ export default function MintTokenPage() {
   const [error, setError] = useState("");
   const [txHash, setTxHash] = useState("");
   const [isClaimMode, setIsClaimMode] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const tokenContract = getContract({
     client: client,
@@ -66,15 +69,19 @@ export default function MintTokenPage() {
       <main className="p-4 pb-10 min-h-[100vh] flex items-center justify-center container max-w-screen-lg mx-auto">
         <div className="py-20 text-center text-white">
           <div className="flex flex-col items-center gap-8">
+            {/* <div className="aspect-square w-3/4 mx-auto relative rounded-2xl overflow-hidden">
+              <Spline scene="https://prod.spline.design/ZSB-xEOdeUNPtdtE/scene.splinecode" />
+            </div> */}
+
             {tokenMetadata?.image && (
               <MediaRenderer
                 client={client}
                 src={tokenMetadata.image}
-                className="w-32 h-32 rounded-full mb-6"
+                className="w-32 h-32 rounded-full mb-6 border-4 border-yellow-500"
               />
             )}
 
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-green-400 to-cyan-500 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent font-serif">
               {tokenMetadata?.name || "Base Token"}
             </h1>
 
@@ -82,18 +89,21 @@ export default function MintTokenPage() {
               <button
                 className={`px-6 py-2 rounded-full ${
                   isClaimMode
-                    ? "bg-cyan-600 text-white"
-                    : "bg-white/10 hover:bg-white/20"
+                    ? "bg-yellow-600 text-black"
+                    : "bg-black/10 hover:bg-black/20"
                 }`}
-                onClick={() => setIsClaimMode(true)}
+                onClick={() => {
+                  setIsClaimMode(true);
+                  setIsModalOpen(true);
+                }}
               >
-                Claim Tokens
+                Transfer Tokens
               </button>
               <button
                 className={`px-6 py-2 rounded-full ${
                   !isClaimMode
-                    ? "bg-green-600 text-white"
-                    : "bg-white/10 hover:bg-white/20"
+                    ? "bg-yellow-600 text-black"
+                    : "bg-black/10 hover:bg-black/20"
                 }`}
                 onClick={() => setIsClaimMode(false)}
               >
@@ -101,11 +111,32 @@ export default function MintTokenPage() {
               </button>
             </div>
 
-            <div className="my-8 p-6 bg-white/5 rounded-xl border border-white/10">
+            {isModalOpen && (
+              <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
+                <div className="bg-black p-6 rounded-lg text-center shadow-lg">
+                  <h2 className="text-xl font-bold mb-4 text-yellow-400">
+                    Feature Under Development
+                  </h2>
+                  <p className="mb-4 text-yellow-300">
+                    The transfer tokens feature is currently under development.
+                    The smart contract is deployed via thirdweb infra but a work
+                    in progress to connect it to this frontend app.
+                  </p>
+                  <button
+                    className="bg-yellow-600 text-black px-4 py-2 rounded hover:bg-yellow-700 transition"
+                    onClick={() => setIsModalOpen(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <div className="my-8 p-6 bg-black/5 rounded-xl border border-black/10">
               <div className="flex flex-col gap-4 items-center">
                 <div className="flex items-center gap-4">
                   <button
-                    className="bg-white/10 px-4 py-2 rounded-lg hover:bg-white/20 transition-colors"
+                    className="bg-black/10 px-4 py-2 rounded-lg hover:bg-black/20 transition-colors"
                     onClick={() => setAmount(Math.max(1, amount - 1))}
                   >
                     -
@@ -116,11 +147,11 @@ export default function MintTokenPage() {
                     onChange={(e) =>
                       setAmount(Math.max(1, Number(e.target.value)))
                     }
-                    className="w-24 text-center bg-white/10 rounded-lg py-2"
+                    className="w-24 text-center bg-black/10 rounded-lg py-2"
                     min="1"
                   />
                   <button
-                    className="bg-white/10 px-4 py-2 rounded-lg hover:bg-white/20 transition-colors"
+                    className="bg-black/10 px-4 py-2 rounded-lg hover:bg-black/20 transition-colors"
                     onClick={() => setAmount(amount + 1)}
                   >
                     +
@@ -128,14 +159,14 @@ export default function MintTokenPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-yellow-300">
                     Available: {availableTokens.toLocaleString()}
                   </p>
-                  <p className="text-sm text-cyan-400">
+                  <p className="text-sm text-yellow-400">
                     Max per wallet: {maxPerWallet.toString()}
                   </p>
                   {totalTokenSupply && (
-                    <p className="text-sm text-amber-400">
+                    <p className="text-sm text-yellow-500">
                       Total supply:{" "}
                       {toTokens(totalTokenSupply, decimals).toLocaleString()}
                     </p>
@@ -147,23 +178,29 @@ export default function MintTokenPage() {
             <TransactionButton
               transaction={async () => {
                 try {
-                  if (isClaimMode) {
-                    // Claim logic (uses token amount directly)
-                    console.log(
-                      "Claim quantity:",
-                      (BigInt(amount) * BigInt(10 ** decimals)).toString()
+                  if (!account) {
+                    throw new Error(
+                      "Wallet not connected. Please connect your wallet."
                     );
-                    return claimTo({
+                  }
+                  if (isClaimMode) {
+                    // Transfer tokens logic
+                    setIsModalOpen(true);
+                    const transferAmount = (
+                      BigInt(amount) * BigInt(10 ** decimals)
+                    ).toString();
+                    console.log("Transfer tokens:", transferAmount);
+                    const transaction = await prepareContractCall({
                       contract: tokenContract,
-                      to: account?.address || "",
-                      quantity: (
-                        BigInt(amount) * BigInt(10 ** decimals)
-                      ).toString(),
-                      proof: [],
-                      overrides: {
-                        value: BigInt(0),
-                      },
+                      method:
+                        "function transfer(address to, uint256 amount) returns (bool)",
+                      params: [account?.address || "", transferAmount],
                     });
+                    const result = await sendTransaction({
+                      transaction,
+                      account: account?.address || "",
+                    });
+                    return result;
                   } else {
                     // Mint logic (needs decimal conversion)
                     return mintTo({
@@ -196,10 +233,10 @@ export default function MintTokenPage() {
                 setError("");
                 setTxHash(result.transactionHash);
               }}
-              className="bg-gradient-to-r from-green-500 to-cyan-600 hover:from-green-600 hover:to-cyan-700 px-8 py-4 rounded-xl text-lg font-bold transition-all transform hover:scale-105"
+              className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 px-8 py-4 rounded-xl text-lg font-bold transition-all transform hover:scale-105"
             >
               {isClaimMode
-                ? `Claim ${amount} ${tokenMetadata?.symbol || "TOKENS"}`
+                ? `Transfer ${amount} ${tokenMetadata?.symbol || "TOKENS"}`
                 : `Mint ${amount} ${tokenMetadata?.symbol || "TOKENS"}`}
             </TransactionButton>
 
@@ -210,8 +247,8 @@ export default function MintTokenPage() {
             )}
 
             {txHash && (
-              <div className="mt-4 p-4 bg-green-900/20 rounded-xl">
-                <p className="text-green-400">
+              <div className="mt-4 p-4 bg-yellow-900/20 rounded-xl">
+                <p className="text-yellow-400">
                   Success! View transaction:
                   <a
                     href={`https://basescan.org/tx/${txHash}`}

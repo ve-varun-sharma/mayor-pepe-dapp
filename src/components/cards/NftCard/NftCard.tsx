@@ -1,3 +1,5 @@
+"use client";
+
 import { GlareCard } from "@/components/ui/glare-card";
 import { MediaRenderer } from "thirdweb/react";
 import { client } from "@/app/client";
