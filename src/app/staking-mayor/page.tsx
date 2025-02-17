@@ -5,8 +5,9 @@ import { BorderBeam } from "@/components/magicui/border-beam";
 import { motion, useInView } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import { useRef } from "react";
+import { SplashCursor } from "@/components/ui/splash-cursor";
 
-export default function StakingPage() {
+export default function Hero() {
   const fadeInRef = useRef(null);
   const fadeInInView = useInView(fadeInRef, {
     once: true,
@@ -24,14 +25,14 @@ export default function StakingPage() {
   };
 
   return (
-    <section id="hero">
+    <section id="hero" className="bg-black text-white">
       <div className="relative h-full overflow-hidden py-14">
-        <div className="container z-10 flex flex-col">
+        <div className="container mx-auto z-10 flex flex-col items-center">
           <div className="mt-20 grid grid-cols-1">
             <div className="flex flex-col items-center gap-6 pb-8 text-center">
               <motion.h1
                 ref={fadeInRef}
-                className="text-balance bg-gradient-to-br from-black from-30% to-black/60 bg-clip-text py-6 text-5xl font-medium leading-none tracking-tighter text-transparent dark:from-white dark:to-white/40 sm:text-6xl md:text-7xl lg:text-8xl"
+                className="text-balance bg-gradient-to-br from-white to-gray-400 bg-clip-text py-6 text-5xl font-medium leading-none tracking-tighter text-transparent sm:text-6xl md:text-7xl lg:text-8xl"
                 animate={fadeInInView ? "animate" : "initial"}
                 variants={fadeUpVariants}
                 initial={false}
@@ -42,11 +43,11 @@ export default function StakingPage() {
                   type: "spring",
                 }}
               >
-                Create Magical <br /> Landing Pages <br />
+                Staking $MAYOR <br /> Coming Soon! <br />
               </motion.h1>
 
               <motion.p
-                className="text-balance text-lg tracking-tight text-gray-400 md:text-xl"
+                className="text-balance text-lg tracking-tight text-gray-300 md:text-xl"
                 animate={fadeInInView ? "animate" : "initial"}
                 variants={fadeUpVariants}
                 initial={false}
@@ -57,8 +58,8 @@ export default function StakingPage() {
                   type: "spring",
                 }}
               >
-                Magic UI is a curated collection of React + Tailwind CSS +
-                Framer Motion components
+                Join the frog nation as we prepare to stake our claim! <br />
+                Hail Mayor Pepe, the leader of the frog nation! 🐸
               </motion.p>
 
               <motion.div
@@ -76,13 +77,8 @@ export default function StakingPage() {
                 <a
                   href="#"
                   className={cn(
-                    // colors
-                    "bg-black  text-white shadow hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90",
-
-                    // layout
+                    "bg-white text-black shadow hover:bg-gray-200 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700",
                     "group relative inline-flex h-9 w-full items-center justify-center gap-2 overflow-hidden whitespace-pre rounded-md px-4 py-2 text-base font-semibold tracking-tighter focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 md:flex",
-
-                    // animation
                     "transform-gpu ring-offset-current transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-2"
                   )}
                 >
@@ -103,26 +99,22 @@ export default function StakingPage() {
               ease: [0.21, 0.47, 0.32, 0.98],
               type: "spring",
             }}
-            className="relative mt-24 h-full w-full rounded-xl after:absolute after:inset-0 after:z-10 after:[background:linear-gradient(to_top,#fff_30%,transparent)] dark:after:[background:linear-gradient(to_top,#000000_30%,transparent)]"
+            className="relative mt-24 h-full w-full rounded-xl after:absolute after:inset-0 after:z-10 after:[background:linear-gradient(to_top,#000000_30%,transparent)] dark:after:[background:linear-gradient(to_top,#000000_60%,transparent)]"
           >
             <div
               className={cn(
                 "absolute inset-0 bottom-1/2 h-full w-full transform-gpu [filter:blur(120px)]",
-
-                // light styles
-                "[background-image:linear-gradient(to_bottom,#ffaa40,transparent_30%)]",
-
-                // dark styles
-                "dark:[background-image:linear-gradient(to_bottom,#ffffff,transparent_30%)]"
+                "[background-image:linear-gradient(to_bottom,#008080,transparent_30%)]",
+                "dark:[background-image:linear-gradient(to_bottom,#008080,transparent_30%)]"
               )}
             />
 
             <img
-              src="/dashboard-light.png"
+              src="/thirdweb-staking-contract.png"
               className="relative block h-full w-full rounded-xl border dark:hidden"
             />
             <img
-              src="/dashboard-dark.png"
+              src="/thirdweb-staking-contract.png"
               className="relative hidden h-full w-full rounded-xl border dark:block"
             />
             {/* <video
@@ -137,6 +129,7 @@ export default function StakingPage() {
             <BorderBeam size={150} delay={7} />
           </motion.div>
         </div>
+        <SplashCursor />
       </div>
     </section>
   );
